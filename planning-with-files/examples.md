@@ -6,7 +6,8 @@
 
 ### Loop 1: Create Plan
 ```bash
-Write task_plan.md
+Write CLAUDE_DOCs/task_plan.md
+Write CLAUDE_DOCs/PLAN_TIMELINE/OVERALL.md  # Initialize timeline
 ```
 
 ```markdown
@@ -32,24 +33,24 @@ Create a research summary on the benefits of morning exercise.
 
 ### Loop 2: Research
 ```bash
-Read task_plan.md           # Refresh goals
+Read CLAUDE_DOCs/task_plan.md           # Refresh goals
 WebSearch "morning exercise benefits"
-Write notes.md              # Store findings
-Edit task_plan.md           # Mark Phase 2 complete
+Write CLAUDE_DOCs/notes.md              # Store findings
+Edit CLAUDE_DOCs/task_plan.md           # Mark Phase 2 complete
 ```
 
 ### Loop 3: Synthesize
 ```bash
-Read task_plan.md           # Refresh goals
-Read notes.md               # Get findings
-Write morning_exercise_summary.md
-Edit task_plan.md           # Mark Phase 3 complete
+Read CLAUDE_DOCs/task_plan.md           # Refresh goals
+Read CLAUDE_DOCs/notes.md               # Get findings
+Write CLAUDE_DOCs/morning_exercise_summary.md
+Edit CLAUDE_DOCs/task_plan.md           # Mark Phase 3 complete
 ```
 
 ### Loop 4: Deliver
 ```bash
-Read task_plan.md           # Verify complete
-Deliver morning_exercise_summary.md
+Read CLAUDE_DOCs/task_plan.md           # Verify complete
+Deliver CLAUDE_DOCs/morning_exercise_summary.md
 ```
 
 ---
@@ -58,7 +59,7 @@ Deliver morning_exercise_summary.md
 
 **User Request:** "Fix the login bug in the authentication module"
 
-### task_plan.md
+### CLAUDE_DOCs/task_plan.md
 ```markdown
 # Task Plan: Fix Login Bug
 
@@ -91,13 +92,26 @@ Identify and fix the bug preventing successful login.
 
 ---
 
-## Example 3: Feature Development
+## Example 3: Feature Development with Plan Change
 
 **User Request:** "Add a dark mode toggle to the settings page"
 
-### The 3-File Pattern in Action
+### Initial Setup
+```bash
+Write CLAUDE_DOCs/task_plan.md
+Write CLAUDE_DOCs/PLAN_TIMELINE/OVERALL.md
+```
 
-**task_plan.md:**
+### Mid-task Plan Change (adding Phase 5)
+```bash
+# Before modifying phases, archive current plan
+Copy CLAUDE_DOCs/task_plan.md → CLAUDE_DOCs/PLAN_TIMELINE/20260106_143000.md
+Append to CLAUDE_DOCs/PLAN_TIMELINE/OVERALL.md:
+  "| 20260106_143000 | Added Phase 5 for accessibility testing |"
+Edit CLAUDE_DOCs/task_plan.md  # Add the new phase
+```
+
+### CLAUDE_DOCs/task_plan.md:
 ```markdown
 # Task Plan: Dark Mode Toggle
 
@@ -109,7 +123,8 @@ Add functional dark mode toggle to settings.
 - [x] Phase 2: Design implementation approach ✓
 - [ ] Phase 3: Implement toggle component (CURRENT)
 - [ ] Phase 4: Add theme switching logic
-- [ ] Phase 5: Test and polish
+- [ ] Phase 5: Accessibility testing (ADDED)
+- [ ] Phase 6: Test and polish
 
 ## Decisions Made
 - Using CSS custom properties for theme
@@ -120,7 +135,7 @@ Add functional dark mode toggle to settings.
 **Currently in Phase 3** - Building toggle component
 ```
 
-**notes.md:**
+### CLAUDE_DOCs/notes.md:
 ```markdown
 # Notes: Dark Mode Implementation
 
@@ -141,7 +156,17 @@ Add functional dark mode toggle to settings.
 - Dark text: #eaeaea
 ```
 
-**dark_mode_implementation.md:** (deliverable)
+### CLAUDE_DOCs/PLAN_TIMELINE/OVERALL.md:
+```markdown
+# Plan Timeline
+
+| Timestamp | Change Purpose |
+|-----------|----------------|
+| 20260106_140000 | Initial plan created |
+| 20260106_143000 | Added Phase 5 for accessibility testing |
+```
+
+### CLAUDE_DOCs/dark_mode_implementation.md: (deliverable)
 ```markdown
 # Dark Mode Implementation
 
@@ -158,7 +183,66 @@ File: src/hooks/useTheme.ts
 
 ---
 
-## Example 4: Error Recovery Pattern
+## Example 4: Algorithm Development with Design Docs
+
+**User Request:** "Design and implement a caching algorithm for our API"
+
+### Create Design Document
+```bash
+Write CLAUDE_DOCs/Design/20260106_v1_算法设计.md
+Append to CLAUDE_DOCs/Design/OVERALL.md:
+  "| 20260106_v1_算法设计.md | LRU caching algorithm for API response optimization |"
+```
+
+### CLAUDE_DOCs/Design/20260106_v1_算法设计.md:
+```markdown
+# Algorithm Design: API Response Caching
+
+## Problem Statement
+API responses are slow due to repeated database queries.
+
+## Proposed Solution
+LRU (Least Recently Used) cache with TTL.
+
+## Design Details
+- Cache size: 1000 entries
+- TTL: 5 minutes
+- Eviction policy: LRU
+- Data structure: HashMap + Doubly Linked List
+
+## Pseudocode
+...
+```
+
+### After Implementation - Create Results Analysis
+```bash
+Write CLAUDE_DOCs/ResultsAnalysis/20260106_v1_结果报告.md
+Append to CLAUDE_DOCs/ResultsAnalysis/OVERALL.md:
+  "| 20260106_v1_结果报告.md | Cache hit rate 87%, latency reduced by 65% |"
+```
+
+### CLAUDE_DOCs/ResultsAnalysis/20260106_v1_结果报告.md:
+```markdown
+# Results Report: API Caching v1
+
+## Test Environment
+- 10,000 requests over 1 hour
+- 50 concurrent users
+
+## Results
+| Metric | Before | After | Improvement |
+|--------|--------|-------|-------------|
+| Avg Latency | 450ms | 157ms | -65% |
+| Cache Hit Rate | N/A | 87% | - |
+| DB Queries/min | 2400 | 312 | -87% |
+
+## Conclusion
+LRU caching significantly improved API performance.
+```
+
+---
+
+## Example 5: Error Recovery Pattern
 
 When something fails, DON'T hide it:
 
@@ -175,7 +259,7 @@ Action: Read config.json  # Another retry
 Action: Read config.json
 Error: File not found
 
-# Update task_plan.md:
+# Update CLAUDE_DOCs/task_plan.md:
 ## Errors Encountered
 - config.json not found → Will create default config
 
@@ -195,8 +279,38 @@ Success!
 [Context is getting long...]
 [Original goal might be forgotten...]
 
-→ Read task_plan.md          # This brings goals back into attention!
-→ Now make the decision       # Goals are fresh in context
+→ Read CLAUDE_DOCs/task_plan.md   # This brings goals back into attention!
+→ Now make the decision            # Goals are fresh in context
 ```
 
 This is why Manus can handle ~50 tool calls without losing track. The plan file acts as a "goal refresh" mechanism.
+
+---
+
+## Complete Directory Structure Example
+
+After a full development cycle, your `CLAUDE_DOCs/` might look like:
+
+```
+CLAUDE_DOCs/
+├── task_plan.md                          # Current plan
+├── notes.md                              # Research notes
+├── api_caching_implementation.md         # Deliverable
+│
+├── PLAN_TIMELINE/
+│   ├── OVERALL.md
+│   ├── 20260106_100000.md               # Initial plan
+│   ├── 20260106_143000.md               # Added testing phase
+│   └── 20260107_091500.md               # Restructured for v2
+│
+├── Design/
+│   ├── OVERALL.md
+│   ├── 20260106_v1_算法设计.md
+│   ├── 20260106_v1_架构设计.md
+│   └── 20260107_v2_算法设计.md          # Optimized version
+│
+└── ResultsAnalysis/
+    ├── OVERALL.md
+    ├── 20260106_v1_结果报告.md
+    └── 20260107_v2_结果分析.md           # Comparison analysis
+```
